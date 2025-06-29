@@ -11,4 +11,7 @@ yarn-error.log*
 
 # Docker
 .dockerignore
-docker-compose.override.yml 
+docker-compose.override.yml
+
+# Build
+dist
