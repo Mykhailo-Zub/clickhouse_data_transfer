@@ -1,0 +1,32 @@
+{
+  "name": "clickhouse_data_transfer",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/scripts/migrate-to-clickhouse.js",
+    "seed": "node dist/scripts/seed-elastic.js",
+    "dev:start": "npm run dev:seed && npm run dev:migrate",
+    "dev:migrate": "ts-node src/scripts/migrate-to-clickhouse.ts",
+    "dev:seed": "ts-node src/scripts/seed-elastic.ts",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@clickhouse/client-web": "^1.11.2",
+    "@elastic/elasticsearch": "^9.0.2",
+    "@faker-js/faker": "^9.8.0",
+    "dotenv": "^16.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.4",
+    "jest": "^30.0.3",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
