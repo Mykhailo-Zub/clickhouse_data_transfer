@@ -53,6 +53,7 @@ describe("Data Migration Integration Tests", () => {
       lastName: "Doe",
       age: 30,
       followersCount: 1500,
+      timestamp: new Date().toISOString(),
     },
     {
       id: "a2b3e4d5-6c7d-8e9f-0a1b-2c3d4e5f6a7b",
@@ -60,6 +61,7 @@ describe("Data Migration Integration Tests", () => {
       lastName: "Smith",
       age: 25,
       followersCount: 3000,
+      timestamp: new Date().toISOString(),
     },
     {
       id: "f1e2d3c4-b5a6-7d8e-9f0a-1b2c3d4e5f6a",
@@ -67,6 +69,7 @@ describe("Data Migration Integration Tests", () => {
       lastName: "Jones",
       age: 42,
       followersCount: 500,
+      timestamp: new Date().toISOString(),
     },
   ];
 
@@ -121,7 +124,24 @@ describe("Data Migration Integration Tests", () => {
 
       const sortedOriginal = [...testUsers].sort((a, b) => a.id.localeCompare(b.id));
       const sortedMigrated = [...migratedUsers].sort((a, b) => a.id.localeCompare(b.id));
-      expect(sortedMigrated).toEqual(sortedOriginal);
+
+      // ClickHouse returns dates as strings, so we need to compare them carefully.
+      // We will check that the migrated data is structurally similar and timestamps are valid.
+      expect(sortedMigrated.length).toEqual(sortedOriginal.length);
+
+      for (let i = 0; i < sortedMigrated.length; i++) {
+        const original = sortedOriginal[i];
+        const migrated = sortedMigrated[i];
+        expect(migrated.id).toBe(original.id);
+        expect(migrated.firstName).toBe(original.firstName);
+        expect(migrated.lastName).toBe(original.lastName);
+        expect(migrated.age).toBe(original.age);
+        expect(migrated.followersCount).toBe(original.followersCount);
+        // ClickHouse returns a 'YYYY-MM-DD HH:MM:SS.sss' string, which new Date() parses as local time.
+        // We convert it to the ISO format 'YYYY-MM-DDTHH:MM:SS.sssZ' to parse it as UTC.
+        const migratedTimestampAsUTC = new Date(migrated.timestamp.replace(" ", "T") + "Z");
+        expect(migratedTimestampAsUTC.getTime()).toBe(new Date(original.timestamp).getTime());
+      }
     });
 
     test("should handle empty source gracefully", async () => {

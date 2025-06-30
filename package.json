@@ -4,7 +4,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/scripts/migrate-to-clickhouse.js",
+    "start": "npm run build && npm run seed && npm run migrate",
+    "migrate": "node dist/scripts/migrate-to-clickhouse.js",
     "seed": "node dist/scripts/seed-elastic.js",
     "dev:start": "npm run dev:seed && npm run dev:migrate",
     "dev:migrate": "ts-node src/scripts/migrate-to-clickhouse.ts",
