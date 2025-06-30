@@ -28,8 +28,8 @@ graph TD
         D -- "Writes to" --> E{ClickHouse};
     end
 
-    style C fill:#F9E2AF,stroke:#333
-    style E fill:#C2E0FF,stroke:#333
+    style C fill:#2986CC,stroke:#333
+    style E fill:#4E7F38,stroke:#333
 ```
 
 ## 📦 Prerequisites
